@@ -1,4 +1,7 @@
 /**
+ * A breadcrumb selector widget which lets you pick a value from a tree like object model,
+ * and presents visually as the path of crumbs of the selected path.
+ * 
  * @require(breadcrumb.BreadcrumbTheme)
  */
 qx.Class.define("breadcrumb.Selector", {
@@ -7,6 +10,15 @@ qx.Class.define("breadcrumb.Selector", {
     
     include : [ breadcrumb.MConfigured ],
     
+    
+    
+    /**
+     * @param head {String?null}
+     * @param placeholder {String?null}
+     * @param roots {qx.data.Array} 
+     * @param value {var?null} 
+     * @param {breadcrumb.Config?null} config
+     */
     construct : function(head, placeholder, roots, value, config) {
         this.base(arguments);
         this.initConfig( config || breadcrumb.DefaultConfig.getInstance() );
