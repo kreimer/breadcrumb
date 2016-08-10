@@ -1,16 +1,13 @@
+/* ************************************************************************
+   License:
+     MIT: https://opensource.org/licenses/MIT
+     See the LICENSE file in the project's top-level directory for details.
+************************************************************************ */
 qx.Theme.define("breadcrumbdemo.theme.Appearance", {
     
     extend: qx.theme.indigo.Appearance,
     
     appearances: {
-        
-//        "kwidget" : {
-//            style : function(states) {
-//                return {
-//                    backgroundColor : "blue"
-//                };
-//            }
-//        }
         
     }
     
