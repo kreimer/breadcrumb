@@ -1,6 +1,7 @@
 /**
  * A breadcrumb selector widget which lets you pick a value from a tree like object model,
  * and presents visually as the path of crumbs of the selected path.
+ * Subnodes can be selected by picking them from a dropdown list.
  * 
  * @require(breadcrumb.BreadcrumbTheme)
  */
@@ -13,11 +14,11 @@ qx.Class.define("breadcrumb.Selector", {
     
     
     /**
-     * @param head {String?null}
-     * @param placeholder {String?null}
-     * @param roots {qx.data.Array} 
-     * @param value {var?null} 
-     * @param {breadcrumb.Config?null} config
+     * @param head {String?null} the head text. If null, a default head '>' is shown.
+     * @param placeholder {String?null}  the placeholder text. If null, no placeholder is shown.
+     * @param roots {qx.data.Array} collection of root nodes, if your object model is a single tree, you can add the root node or its children.
+     * @param value {var?null} the initial selected node.
+     * @param config {breadcrumb.Config?null} the runtime configuration of the selector. If null, an {@link breadcrumb.DefaultConfig} is used.
      */
     construct : function(head, placeholder, roots, value, config) {
         this.base(arguments);
@@ -37,44 +38,69 @@ qx.Class.define("breadcrumb.Selector", {
     
     
     properties : {
-
+        
+        /**
+         * Whether the clear button is shown. When set to true the clear button appears between the head and the crumb list whenever some node is selected.
+         * When set to false, this button is never shown.
+         */
         showClearButton : {
             init : true,
+            check : "Boolean",
             apply : "_applyShowClearButton"
         },
 
+        /*
+         * This property represents the 'null' value when no node is selected.
+         */
         nullValue : {
             init : null,
             apply : "_applyNullValue"
         },
         
+        // overriden
         appearance : {
             refine : true,
             init : "bc-selector"
         },
         
+        //overriden
         focusable : {
             refine : true,
             init : true
         },
         
+        /*
+         * The head text. If null, a default head '>' is shown.
+         */
         head : {
             deferredInit : true,
+            check : "String",
             nullable : true,
             apply : "_applyHead"
         },
 
+        /*
+         * The placeholder text. If null, no placeholder is shown.
+         */
         placeholder : {
             deferredInit : true,
+            check : "String",
             nullable : true,
             apply : "_applyPlaceholder"
         },
         
+        /*
+         * Collection of root nodes, if your object model is a single tree, you can add the root node or its children.
+         */
         roots : {
             deferredInit : true,
+            check : "qx.data.Array",
             apply : "_applyRoots"
         },
                 
+        /*
+         * the current selected node, or {@link #nullValue} if none is selected.
+         */
         value : {
             deferredInit : true,
             nullable : true,
@@ -88,6 +114,10 @@ qx.Class.define("breadcrumb.Selector", {
 
     members : {
         
+        /*
+         * It shows the dropdown list at the root nodes level. If {@link #roots} has a single node, then it shows the dropdown at the 
+         * first level with more than 1 children, that is, the first optionable level.
+         */
         promptRoots : function() {
             if(this.getRoots().length>1) {
                 var dropdown = this.getChildControl("rootDropdown");
@@ -108,7 +138,9 @@ qx.Class.define("breadcrumb.Selector", {
         },
         
         
-        
+        /*
+         * Set the {@link #value} to the {@link #nullValue}
+         */
         clearValue : function() {
             this.setValue(this.getNullValue());
         },
